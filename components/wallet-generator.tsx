@@ -11,7 +11,7 @@ import bs58 from 'bs58'
 
 export function WalletGenerator() {
   const [walletCount, setWalletCount] = useState(1)
-  const [wallets, setWallets] = useState<{ publicKey: string; privateKey: string }[]>([])
+  const [wallets, setWallets] = useState<{ address: string; privateKey: string }[]>([])
   const [copiedPublic, setCopiedPublic] = useState(false)
   const [copiedPrivate, setCopiedPrivate] = useState(false)
 
@@ -19,17 +19,17 @@ export function WalletGenerator() {
     const newWallets = Array.from({ length: walletCount }, () => {
       const keypair = Keypair.generate()
       return {
-        publicKey: keypair.publicKey.toString(),
+        address: keypair.publicKey.toBase58(),
         privateKey: bs58.encode(keypair.secretKey)
       }
     })
     setWallets(newWallets)
   }
 
-  const copyKeys = (type: 'public' | 'private') => {
-    const keys = wallets.map(wallet => wallet[type === 'public' ? 'publicKey' : 'privateKey']).join('\n')
+  const copyKeys = (type: 'address' | 'private') => {
+    const keys = wallets.map(wallet => wallet[type === 'address' ? 'address' : 'privateKey']).join('\n')
     navigator.clipboard.writeText(keys)
-    if (type === 'public') {
+    if (type === 'address') {
       setCopiedPublic(true)
       setTimeout(() => setCopiedPublic(false), 2000)
     } else {
@@ -62,13 +62,13 @@ export function WalletGenerator() {
             {wallets.length > 0 && (
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-lg font-semibold mb-2">Public Keys</h3>
+                  <h3 className="text-lg font-semibold mb-2">Addresses</h3>
                   <div className="bg-muted p-2 rounded-md">
                     {wallets.map((wallet, index) => (
-                      <div key={index} className="mb-1">{wallet.publicKey}</div>
+                      <div key={index} className="mb-1">{wallet.address}</div>
                     ))}
                   </div>
-                  <Button className="mt-2" onClick={() => copyKeys('public')}>
+                  <Button className="mt-2" onClick={() => copyKeys('address')}>
                     {copiedPublic ? <CheckIcon className="mr-2 h-4 w-4" /> : <CopyIcon className="mr-2 h-4 w-4" />}
                     {copiedPublic ? 'Copied!' : 'Copy Public Keys'}
                   </Button>
