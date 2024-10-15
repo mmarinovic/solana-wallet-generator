@@ -70,7 +70,7 @@ export function WalletGenerator() {
                   </div>
                   <Button className="mt-2" onClick={() => copyKeys('address')}>
                     {copiedPublic ? <CheckIcon className="mr-2 h-4 w-4" /> : <CopyIcon className="mr-2 h-4 w-4" />}
-                    {copiedPublic ? 'Copied!' : 'Copy Public Keys'}
+                    {copiedPublic ? 'Copied!' : 'Copy Addresses'}
                   </Button>
                 </div>
                 
